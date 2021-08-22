@@ -13,6 +13,7 @@
         <module>jvm</module>
         <module>data_structures</module>
         <module>justForSomeTest</module>
+        <module>Algorithm</module>
     </modules>
 
     <properties>
