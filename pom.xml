@@ -15,6 +15,7 @@
         <module>justForSomeTest</module>
         <module>Algorithm</module>
         <module>juc</module>
+        <module>spark</module>
     </modules>
 
     <properties>
