@@ -5,13 +5,18 @@ import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.DataSource;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.util.Collector;
 
+/**
+ * --path F:\\hello.txt
+ */
 public class WordCountBatch {
     public static void main(String[] args) throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ParameterTool parameterTool = ParameterTool.fromArgs(args);
 
-        String inputPath="E:\\WorkSpace\\flink-study\\src\\main\\resources\\hello.txt";
+        String inputPath=parameterTool.get("path");
         DataSource<String> inputDataSet = env.readTextFile(inputPath);
 
         DataSet<Tuple2<String, Integer>> resutlSet = inputDataSet.flatMap(new MyFlatMapper())

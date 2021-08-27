@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.newsmodel";
+option java_outer_classname = "NewsModelProto";
+option objc_class_prefix = "NM";
+
+package newsmodel;
+
+
+// Interface exported by the server
+service ModelCalling {
+    // Obtain the domain predictions at given sentences
+    rpc GetDomain(stream SentenceList) returns (stream SentenceList) {}
+
+    // Obtain the event types at given sentences
+    rpc GetEvent(stream SentenceList) returns (stream SentenceList) {}
+
+    // Obtain the entity at given sentences
+    rpc GetEntity(stream SentenceList) returns (stream JSONString) {}
+
+}
+
+message SentenceList {
+    // a list with several sentences
+    repeated string sentence = 1;
+}
+
+message JSONString {
+    // json string of stand entity
+    string entity = 1;
+}
