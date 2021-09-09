@@ -29,7 +29,7 @@ public class StrMatch {
     public static JSONObject strMatch (List<String> aList, List<String> bList){
         int aSize = aList.size();
         int bSize = bList.size();
-        String [] matched=new String[aSize];
+        String [] matched=new String[bSize];
         float[][] scores  = calcScores(aList, bList);
 
         for (int i = 0; i <aSize; i++) {

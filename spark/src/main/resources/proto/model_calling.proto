@@ -17,7 +17,7 @@ service ModelCalling {
     rpc GetEvent(stream SentenceList) returns (stream SentenceList) {}
 
     // Obtain the entity at given sentences
-    rpc GetEntity(stream SentenceList) returns (stream JSONString) {}
+    rpc GetEntity(stream SentenceList) returns (stream SentenceList) {}
 
 }
 
@@ -26,7 +26,7 @@ message SentenceList {
     repeated string sentence = 1;
 }
 
-message JSONString {
-    // json string of stand entity
-    string entity = 1;
-}
+//message JSONString {
+//    // json string of stand entity
+//    string entity = 1;
+//}

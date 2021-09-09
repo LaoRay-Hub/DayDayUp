@@ -25,7 +25,5 @@ public class ThreadPoolDemo2 {
         }finally {
             threadPoolExecutor.shutdown();
         }
-
-
     }
 }
