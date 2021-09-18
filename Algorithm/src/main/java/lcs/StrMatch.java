@@ -3,9 +3,7 @@ package lcs;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.Math.max;
 
@@ -67,6 +65,43 @@ public class StrMatch {
 
         System.out.println("a小于b"+strMatch(aList1, bList1));
 
+
+        List<String> aList2 = new ArrayList<>();
+        aList2.add("catalog");
+        aList2.add("create_time");
+        aList2.add("driver_name");
+        aList2.add("id");
+        aList2.add("name");
+        aList2.add("operator_id");
+        aList2.add("operator_name");
+        aList2.add("password");
+        aList2.add("remarks");
+        aList2.add("schema_name");
+        aList2.add("type");
+        aList2.add("update_time");
+        aList2.add("url");
+        aList2.add("username");
+        aList2.add("valid_state");
+
+        List<String> bList2 = new ArrayList<>();
+        bList2.add("catalog");
+        bList2.add("create_time");
+        bList2.add("driver_name");
+        bList2.add("id");
+        bList2.add("name");
+        bList2.add("operator_id");
+        bList2.add("operator_name");
+        bList2.add("password");
+        bList2.add("remarks");
+        bList2.add("schema_name");
+        bList2.add("type");
+        bList2.add("update_time");
+        bList2.add("url");
+        bList2.add("username");
+        bList2.add("valid_state");
+
+        System.out.println("a等于b"+strMatch(aList2, bList2));
+
     }
 
     public static JSONObject strMatch(List<String> aList, List<String> bList) {
@@ -76,14 +111,14 @@ public class StrMatch {
         List<String> bListUnused = new ArrayList<>();
         String[] matched = new String[Math.max(aSize, bSize)];
         float[][] scores = calcScores(aList, bList);
-        JSONObject jsonObject = new JSONObject();
+        JSONObject strMatched = new JSONObject();
 
-        for (int i = 0; i < aSize; i++) {
-            for (int j = 0; j < bSize; j++) {
-                System.out.print(scores[i][j] + ",");
-            }
-            System.out.println();
-        }
+//        for (int i = 0; i < aSize; i++) {
+//            for (int j = 0; j < bSize; j++) {
+//                System.out.print(scores[i][j] + ",");
+//            }
+//            System.out.println();
+//        }
 
         //找到scores最大的位置
         for (int i = 0; i < aSize; i++) {
@@ -110,32 +145,36 @@ public class StrMatch {
             }
         }
 
-        List<String> strings = Arrays.asList(matched);
-        List<String> matchedList = new ArrayList<>(strings);
+        List<String> matchedList = new ArrayList<>(Arrays.asList(matched));
         for (int i = 0; i < bList.size(); i++) {
             if (!bListUsedIndex.contains(i)) {
                 bListUnused.add(bList.get(i));
             }
         }
         matchedList.addAll(bListUnused);
+//
+//        List<String> matchedListFinal = new ArrayList<>();
+//        for (String s : matchedList) {
+//            if (StringUtils.isNotBlank(s)) {
+//                matchedListFinal.add(s);
+//            }
+//        }
+//
+//        System.out.println("matchedList="+matchedList);
+//        System.out.println("matchedListFinal="+matchedListFinal);
+//
+//        System.out.println("matchedList2="+matchedList);
 
-
-        List<String> matchedListFinal = new ArrayList<>();
-        for (String s : matchedList) {
-            if (StringUtils.isNotBlank(s)) {
-                matchedListFinal.add(s);
-            }
-        }
-
-        jsonObject.put("col1", aList);
+        strMatched.put("col1", aList);
 
         if (aSize < bSize) {
-            jsonObject.put("col2", matchedListFinal);
+            matchedList.removeAll(Collections.singletonList(null));
+            strMatched.put("col2", matchedList);
         } else {
-            jsonObject.put("col2", matchedList);
+            strMatched.put("col2", matchedList);
         }
 
-        return jsonObject;
+        return strMatched;
     }
 
     /**
