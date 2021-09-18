@@ -1,8 +1,10 @@
 package lcs;
 
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.Math.max;
@@ -10,106 +12,148 @@ import static java.lang.Math.max;
 public class StrMatch {
     public static void main(String[] args) {
 
-         List<String> aList = new ArrayList<>();
-         aList.add("col1");
-         aList.add("col2");
-         aList.add("col3");
-         aList.add("col4");
-         aList.add("col5");
-         aList.add("col6");
-         aList.add("col6");
+        List<String> aList = new ArrayList<>();
+        aList.add("catalog");
+        aList.add("create_time");
+        aList.add("driver_name");
+        aList.add("id");
+        aList.add("name");
+        aList.add("operator_id");
+        aList.add("operator_name");
+        aList.add("password");
+        aList.add("remarks");
+        aList.add("schema_name");
+        aList.add("type");
+        aList.add("update_time");
+        aList.add("url");
+        aList.add("username");
+        aList.add("valid_state");
 
         List<String> bList = new ArrayList<>();
-        bList.add("col1");
-        bList.add("col3");
-        bList.add("col");
-        bList.add("col4");
-        bList.add("col2");
-        bList.add("col5");
+        bList.add("app_id");
+        bList.add("parent_code");
+        bList.add("id");
+        bList.add("app_id");
+        bList.add("auth_name");
+        bList.add("app_name");
 
-        System.out.println(strMatch(aList, bList));
+        System.out.println("a大于b"+strMatch(aList, bList));
+
+        List<String> aList1 = new ArrayList<>();
+        aList1.add("app_id");
+        aList1.add("parent_code");
+        aList1.add("id");
+        aList1.add("app_id");
+        aList1.add("auth_name");
+        aList1.add("app_name");
+
+
+        List<String> bList1 = new ArrayList<>();
+        bList1.add("catalog");
+        bList1.add("create_time");
+        bList1.add("driver_name");
+        bList1.add("id");
+        bList1.add("name");
+        bList1.add("operator_id");
+        bList1.add("operator_name");
+        bList1.add("password");
+        bList1.add("remarks");
+        bList1.add("schema_name");
+        bList1.add("type");
+        bList1.add("update_time");
+        bList1.add("url");
+        bList1.add("username");
+        bList1.add("valid_state");
+
+        System.out.println("a小于b"+strMatch(aList1, bList1));
 
     }
 
-    public static JSONObject strMatch (List<String> aList, List<String> bList){
+    public static JSONObject strMatch(List<String> aList, List<String> bList) {
         int aSize = aList.size();
         int bSize = bList.size();
-        List<Integer> bListUsedIndex=new ArrayList<>();
-        List<String> bListUnused=new ArrayList<>();
-        List<String> matched=new ArrayList<>();
-        float[][] scores  = calcScores(aList, bList);
+        List<Integer> bListUsedIndex = new ArrayList<>();
+        List<String> bListUnused = new ArrayList<>();
+        String[] matched = new String[Math.max(aSize, bSize)];
+        float[][] scores = calcScores(aList, bList);
+        JSONObject jsonObject = new JSONObject();
 
-        for (int i = 0; i <aSize; i++) {
+        for (int i = 0; i < aSize; i++) {
             for (int j = 0; j < bSize; j++) {
-                System.out.print(scores[i][j]+",");
+                System.out.print(scores[i][j] + ",");
             }
             System.out.println();
         }
 
         //找到scores最大的位置
-        for (int i = 0; i < aList.size(); i++) {
-            int row=0,col=0;
-            double maxValue=scores[0][0];
+        for (int i = 0; i < aSize; i++) {
+            int row = 0, col = 0;
+            double maxValue = scores[0][0];
             for (int j = 0; j < scores.length; j++) {
                 for (int k = 0; k < scores[0].length; k++) {
-                    if(scores[j][k]>maxValue){
-                        maxValue=scores[j][k];
-                        row=j;
-                        col=k;
+                    if (scores[j][k] > maxValue) {
+                        maxValue = scores[j][k];
+                        row = j;
+                        col = k;
                     }
                 }
             }
             bListUsedIndex.add(col);
             //取出匹配分最高的数，存入数组
-            matched.add(bList.get(col));
+            matched[row] = bList.get(col);
             //将评分表行列分数置为-1
             for (int j = 0; j < scores.length; j++) {
-                scores[j][col]=-1f;
-                for (int k=0;k<scores[0].length;k++){
-                    scores[row][k]=-1f;
+                scores[j][col] = -1f;
+                for (int k = 0; k < scores[0].length; k++) {
+                    scores[row][k] = -1f;
                 }
             }
         }
 
+        List<String> strings = Arrays.asList(matched);
+        List<String> matchedList = new ArrayList<>(strings);
         for (int i = 0; i < bList.size(); i++) {
-            if(!bListUsedIndex.contains(i)){
+            if (!bListUsedIndex.contains(i)) {
                 bListUnused.add(bList.get(i));
             }
         }
-        matched.addAll(bListUnused);
+        matchedList.addAll(bListUnused);
 
 
-
-
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("col1",aList);
-
-        if(aSize>bSize){
-            List<String>matchedSub= matched.subList(0, bSize);
-            jsonObject.put("col2",matchedSub);
-        }else {
-            jsonObject.put("col2",matched);
+        List<String> matchedListFinal = new ArrayList<>();
+        for (String s : matchedList) {
+            if (StringUtils.isNotBlank(s)) {
+                matchedListFinal.add(s);
+            }
         }
 
+        jsonObject.put("col1", aList);
+
+        if (aSize < bSize) {
+            jsonObject.put("col2", matchedListFinal);
+        } else {
+            jsonObject.put("col2", matchedList);
+        }
 
         return jsonObject;
     }
 
     /**
      * 结合最长子序列和字符串长度算出两个list的字符串，相互匹配的分值
+     *
      * @param a list1
      * @param b list1
      * @return 字符串相互匹配值二维数组
      */
-    public static float [][] calcScores(List<String> a, List<String> b){
+    public static float[][] calcScores(List<String> a, List<String> b) {
         int aSize = a.size();
         int bSize = b.size();
-        float [][] scores=new float[aSize][bSize];
+        float[][] scores = new float[aSize][bSize];
 
-        for (int i = 0; i <aSize; i++) {
+        for (int i = 0; i < aSize; i++) {
             for (int j = 0; j < bSize; j++) {
-                int lcs=lcs(a.get(i),b.get(j));
-                scores[i][j]=lcs+(float)lcs/max(a.get(i).length(),b.get(j).length());
+                int lcs = lcs(a.get(i), b.get(j));
+                scores[i][j] = lcs + (float) lcs / max(a.get(i).length(), b.get(j).length());
             }
         }
         return scores;
@@ -117,6 +161,7 @@ public class StrMatch {
 
     /**
      * 最长子序算法
+     *
      * @param str1 字符串1
      * @param str2 字符串2
      * @return 两个字符串匹配的子序个数
@@ -124,13 +169,13 @@ public class StrMatch {
     public static int lcs(String str1, String str2) {
         int len1 = str1.length();
         int len2 = str2.length();
-        int[][] c = new int[len1+1][len2+1];
+        int[][] c = new int[len1 + 1][len2 + 1];
         for (int i = 0; i <= len1; i++) {
-            for( int j = 0; j <= len2; j++) {
-                if(i == 0 || j == 0) {
+            for (int j = 0; j <= len2; j++) {
+                if (i == 0 || j == 0) {
                     c[i][j] = 0;
-                } else if (str1.charAt(i-1) == str2.charAt(j-1)) {
-                    c[i][j] = c[i-1][j-1] + 1;
+                } else if (str1.charAt(i - 1) == str2.charAt(j - 1)) {
+                    c[i][j] = c[i - 1][j - 1] + 1;
                 } else {
                     c[i][j] = max(c[i - 1][j], c[i][j - 1]);
                 }
