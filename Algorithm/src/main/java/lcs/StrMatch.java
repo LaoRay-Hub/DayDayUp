@@ -119,9 +119,9 @@ public class StrMatch {
 //            }
 //            System.out.println();
 //        }
-
+//        System.out.println("====================");
         //找到scores最大的位置
-        for (int i = 0; i < aSize; i++) {
+        for (int i = 0; i < Math.min(aSize,bSize); i++) {
             int row = 0, col = 0;
             double maxValue = scores[0][0];
             for (int j = 0; j < scores.length; j++) {
@@ -134,6 +134,7 @@ public class StrMatch {
                 }
             }
             bListUsedIndex.add(col);
+
             //取出匹配分最高的数，存入数组
             matched[row] = bList.get(col);
             //将评分表行列分数置为-1
@@ -143,6 +144,18 @@ public class StrMatch {
                     scores[row][k] = -1f;
                 }
             }
+//
+//            if(bListUsedIndex.size()>=bSize){
+//                break;
+//            }
+//            for (int k = 0; k< aSize; k++) {
+//                for (int j = 0; j < bSize; j++) {
+//                    System.out.print(scores[k][j] + ",");
+//                }
+//                System.out.println();
+//
+//            }
+//            System.out.println("====================");
         }
 
         List<String> matchedList = new ArrayList<>(Arrays.asList(matched));
@@ -169,10 +182,8 @@ public class StrMatch {
 
         if (aSize < bSize) {
             matchedList.removeAll(Collections.singletonList(null));
-            strMatched.put("col2", matchedList);
-        } else {
-            strMatched.put("col2", matchedList);
         }
+        strMatched.put("col2", matchedList);
 
         return strMatched;
     }

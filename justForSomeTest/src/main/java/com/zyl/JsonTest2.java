@@ -1,10 +1,8 @@
 package com.zyl;
 
-import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.google.errorprone.annotations.Var;
+import org.apache.commons.lang.StringUtils;
 
 public class JsonTest2 {
     public static void main(String[] args) {

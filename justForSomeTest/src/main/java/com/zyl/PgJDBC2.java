@@ -1,12 +1,8 @@
 package com.zyl;
 
-import com.google.errorprone.annotations.Var;
 
 import java.sql.*;
-import java.util.Random;
 
-import static com.zyl.NameRandom.getChineseFamilyName;
-import static com.zyl.NameRandom.getChineseGivenName;
 
 public class PgJDBC2 { public static void main(String[] args) {
     Connection conn = null;
