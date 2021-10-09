@@ -6,8 +6,9 @@ import net.sf.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
 
-
-//-XX:MetaspaceSize=10m -XX:MaxMetaspaceSize=10m
+/**metaSpace溢出测试
+ * -XX:MetaspaceSize=10m -XX:MaxMetaspaceSize=10m
+ */
 public class JvmDemo5 {
 
     public static void main(String[] args) {
